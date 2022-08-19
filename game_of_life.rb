@@ -22,7 +22,7 @@ class GameOfLife
     (0..@generation.length - 1).each do |i|
       (0..@generation.length - 1).each do |j|
         neighbors = find_neighbors(i, j)
-        if checkAlive(i, j)
+        if check_alive(i, j)
           next_gen[i].push(alive_neighbors_evolve(neighbors))
         else
           next_gen[i].push(dead_neighbors_evolve(neighbors))
@@ -34,9 +34,9 @@ class GameOfLife
     next_gen
   end
 
-  def run_generation(n)
+  def run_generation(num)
     count = 0
-    while count < n
+    while count < num
       next_gen = traverse_gen
       #puts next_gen
       #next_gen = '' if next_gen.length.positive? && count != n
@@ -45,8 +45,8 @@ class GameOfLife
     next_gen
   end
 
-  def checkAlive(row, col)
-   @generation[row][col] == ALIVE_MARKER
+  def check_alive(row, col)
+    @generation[row][col] == ALIVE_MARKER
   end
 
   def find_neighbors(row, col)
@@ -54,37 +54,37 @@ class GameOfLife
     directions = [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1]]
 
     directions.each do |direction|
-      neighborRow = direction[0]
-      neighborCol = direction[1]
-      if checkBoundsDirection(row + neighborRow, col + neighborCol)
-        neighbors.push(@generation[row + neighborRow][col + neighborCol])
+      neighbor_row = direction[0]
+      neighbor_col = direction[1]
+      if check_bounds_direction(row + neighbor_row, col + neighbor_col)
+        neighbors.push(@generation[row + neighbor_row][col + neighbor_col])
 
       end
     end
     neighbors
   end
 
-  def checkBoundsDirection(row, col)
-    rowInBounds = row >= 0 && row < @generation.length
-    colInBounds = col >= 0 && col < @generation.length
-    rowInBounds && colInBounds
+  def check_bounds_direction(row, col)
+    row_in_bounds = row >= 0 && row < @generation.length
+    col_in_bounds = col >= 0 && col < @generation.length
+    row_in_bounds && col_in_bounds
   end
 
   def alive_neighbors_evolve(neighbors)
     return DEAD_MARKER if neighbors.length < 2
 
-    countLive = 0
-    countDead = 0
+    count_live = 0
+    count_dead = 0
 
     neighbors.each do |neighbor|
       if neighbor == ALIVE_MARKER
-        countLive += 1
+        count_live += 1
       else
-        countDead += 1
+        count_dead += 1
       end
     end
 
-    if countLive > 3 || countLive < 2
+    if count_live > 3 || count_live < 2
       DEAD_MARKER
     else
       ALIVE_MARKER
@@ -106,7 +106,8 @@ class GameOfLife
   end
 end
 
-game = GameOfLife.new([['O', 'X', 'X'], ['X', 'O', 'O'], ['O','O' ,'X']])
-#game._g()
-p game.traverse_gen
+game = GameOfLife.new([['O', 'X', 'X'], ['X', 'O', 'O'], ['O','O','X']])
+#p game.traverse_gen
+
+p game.run_generation(6)
 

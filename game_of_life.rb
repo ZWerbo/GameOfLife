@@ -3,7 +3,6 @@
 class GameOfLife
   ALIVE_MARKER = 'O'
   DEAD_MARKER = 'X'
-  attr_reader :gen
 
   def initialize(grid)
     #@n = n

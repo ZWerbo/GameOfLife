@@ -1,55 +1,55 @@
 # frozen_string_literal: true
 
 class GameOfLife
+  ALIVE_MARKER = 'O'
+  DEAD_MARKER = 'X'
   attr_reader :gen
 
-  def initialize(n)
-    @n = n
-    @gen = [%w[O X X],
-            %w[X O O],
-            %w[O O X]]
+  def initialize(grid)
+    #@n = n
+    #@generation = [%w[O ,'X' X],
+    #        %w[X O O],
+    #        %w[O O X]]
+    @generation = grid
   end
 
-  def traverseGen
-    nextGen = []
-    (0..2).each do |_i|
-      nextGen.push([])
+  def traverse_gen
+    next_gen = []
+    (1..@generation.length).each do 
+      next_gen.push([])
     end
 
-    (0..@gen.length - 1).each do |i|
-      (0..@gen.length - 1).each do |j|
-        neighbors = findNeighbors(i, j)
+    (0..@generation.length - 1).each do |i|
+      (0..@generation.length - 1).each do |j|
+        neighbors = find_neighbors(i, j)
         if checkAlive(i, j)
-          nextGen[i].push(aliveNeighbors(neighbors))
-
+          next_gen[i].push(alive_neighbors_evolve(neighbors))
         else
-          nextGen[i].push(deadNeighbors(neighbors))
+          next_gen[i].push(dead_neighbors_evolve(neighbors))
         end
       end
     end
 
-    @gen = nextGen
-    nextGen
+    @generation = next_gen
+    next_gen
   end
 
-  def runGeneration
+  def run_generation(n)
     count = 0
-    while count < 3
-      nextGen = traverseGen
-      # puts nextGen
-      nextGen = '' if nextGen.length.positive? && count != 2
+    while count < n
+      next_gen = traverse_gen
+      #puts next_gen
+      #next_gen = '' if next_gen.length.positive? && count != n
       count += 1
     end
-    nextGen
+    next_gen
   end
 
   def checkAlive(row, col)
-    return true if @gen[row][col] == 'O'
-
-    false
+   @generation[row][col] == ALIVE_MARKER
   end
 
-  def findNeighbors(row, col)
+  def find_neighbors(row, col)
     neighbors = []
     directions = [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1]]
 
@@ -57,7 +57,7 @@ class GameOfLife
       neighborRow = direction[0]
       neighborCol = direction[1]
       if checkBoundsDirection(row + neighborRow, col + neighborCol)
-        neighbors.push(@gen[row + neighborRow][col + neighborCol])
+        neighbors.push(@generation[row + neighborRow][col + neighborCol])
 
       end
     end
@@ -65,19 +65,19 @@ class GameOfLife
   end
 
   def checkBoundsDirection(row, col)
-    rowInBounds = row >= 0 && row < @gen.length
-    colInBounds = col >= 0 && col < @gen.length
+    rowInBounds = row >= 0 && row < @generation.length
+    colInBounds = col >= 0 && col < @generation.length
     rowInBounds && colInBounds
   end
 
-  def aliveNeighbors(neighbors)
-    return 'X' if neighbors.length < 2
+  def alive_neighbors_evolve(neighbors)
+    return DEAD_MARKER if neighbors.length < 2
 
     countLive = 0
     countDead = 0
 
     neighbors.each do |neighbor|
-      if neighbor == 'O'
+      if neighbor == ALIVE_MARKER
         countLive += 1
       else
         countDead += 1
@@ -85,26 +85,28 @@ class GameOfLife
     end
 
     if countLive > 3 || countLive < 2
-      'X'
+      DEAD_MARKER
     else
-      'O'
+      ALIVE_MARKER
     end
   end
 
-  def deadNeighbors(neighbors)
+  def dead_neighbors_evolve(neighbors)
     count = 0
 
     neighbors.each do |neighbor|
-      count += 1 if neighbor == 'O'
+      count += 1 if neighbor == ALIVE_MARKER
     end
 
     if count == 3
-      'O'
+      ALIVE_MARKER
     else
-      'X'
+      DEAD_MARKER
     end
   end
 end
 
-game = GameOfLife.new(3)
-p game.runGeneration
+game = GameOfLife.new([['O', 'X', 'X'], ['X', 'O', 'O'], ['O','O' ,'X']])
+#game._g()
+p game.traverse_gen
+

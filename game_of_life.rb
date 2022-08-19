@@ -12,7 +12,7 @@ class GameOfLife
     @generation = grid
   end
 
-  def traverse_gen
+  def evolve_generation
     next_gen = []
     (1..@generation.length).each do 
       next_gen.push([])
@@ -33,10 +33,10 @@ class GameOfLife
     next_gen
   end
 
-  def run_generation(num)
+  def run_generations(num)
     count = 0
     while count < num
-      next_gen = traverse_gen
+      next_gen = evolve_generation
       #puts next_gen
       #next_gen = '' if next_gen.length.positive? && count != n
       count += 1
@@ -108,5 +108,5 @@ end
 game = GameOfLife.new([['O', 'X', 'X'], ['X', 'O', 'O'], ['O','O','X']])
 #p game.traverse_gen
 
-p game.run_generation(6)
+p game.run_generations(6)
 

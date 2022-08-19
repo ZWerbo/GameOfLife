@@ -230,3 +230,5 @@ console.log(game3.runGenerations())
 //     ['X', 'O', 'O]
 
 // Using diagnals or not we hit hit a wall by about the third generation. 
+
+//github CoPilot

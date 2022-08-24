@@ -108,5 +108,5 @@ end
 game = GameOfLife.new([['O', 'X', 'X'], ['X', 'O', 'O'], ['O','O','X']])
 #p game.traverse_gen
 
-p game.run_generations(6)
+p game.evolve_generation()
 
